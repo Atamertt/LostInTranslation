@@ -14,11 +14,7 @@ public class GUI {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JPanel countryPanel = new JPanel();
-            JTextField countryField = new JTextField(10);
-            countryField.setText("can");
-            countryField.setEditable(false); // we only support the "can" country code for now
             countryPanel.add(new JLabel("Country:"));
-            countryPanel.add(countryField);
 
             JPanel languagePanel = new JPanel();
             languagePanel.add(new JLabel("Language:"));
@@ -31,6 +27,22 @@ public class GUI {
                 languageComboBox.addItem(countryCode);
             }
             languagePanel.add(languageComboBox);
+
+            String[] items = new String[translator.getCountryCodes().size()];
+
+            int i = 0;
+            for(String countryCode : translator.getLanguageCodes()) {
+                items[i++] = countryCode;
+            }
+
+            // create the JList with the array of strings and set it to allow multiple
+            // items to be selected at once.
+            JList<String> list = new JList<>(items);
+            list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+            // place the JList in a scroll pane so that it is scrollable in the UI
+            JScrollPane scrollPane = new JScrollPane(list);
+            countryPanel.add(scrollPane, 1);
 
             // add listener for when an item is selected.
             languageComboBox.addItemListener(new ItemListener() {
